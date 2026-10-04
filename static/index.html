@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>AI 流式聊天</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 50px auto; }
+        #output { 
+            min-height: 100px; 
+            border: 1px solid #ccc; 
+            padding: 15px; 
+            margin: 10px 0;
+            white-space: pre-wrap;
+            border-radius: 5px;
+        }
+        #input { width: 80%; padding: 8px; }
+        button { padding: 8px 20px; }
+    </style>
+</head>
+<body>
+    <h1>AI 流式聊天（打字机效果）</h1>
+    <div>
+        <input id="input" placeholder="输入消息..." />
+        <button onclick="send()">发送</button>
+    </div>
+    <div id="output"></div>
+
+    <script>
+        async function send() {
+            const input = document.getElementById('input');
+            const output = document.getElementById('output');
+            const message = input.value.trim();
+            if (!message) return;
+
+            input.value = '';
+            output.textContent = '';
+
+            try {
+                const response = await fetch('/chat/stream', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message, history: [] })
+                });
+
+                if (!response.ok) {
+                    output.textContent = `HTTP 错误: ${response.status}`;
+                    return;
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+
+                    // 按 \n\n 分割 SSE 消息
+                    const parts = buffer.split('\n\n');
+                    buffer = parts.pop();  // 最后一段可能不完整，留到下次处理
+
+                    for (const part of parts) {
+                        if (part.startsWith('data: ')) {
+                            const data = part.slice(6);
+                            if (data === '[DONE]') {
+                                console.log('流结束');
+                                return;
+                            }
+                            output.textContent += data;
+                        }
+                    }
+                }
+            } catch (err) {
+                output.textContent = `请求失败: ${err.message}`;
+            }
+        }
+
+        // 支持回车发送
+        document.getElementById('input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') send();
+        });
+    </script>
+</body>
+</html>
