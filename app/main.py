@@ -4,7 +4,7 @@ from app.providers import get_provider
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
-
+from fastapi.responses import FileResponse, StreamingResponse
 
 app = FastAPI(title="AI Chatbot API")
 # 挂载静态文件
@@ -12,6 +12,11 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 # ========== 路由 ==========
+@app.get("/")
+async def index():
+    return FileResponse("static/index.html")
+
+
 @app.get("/health")  # 健康检查路由，返回 OK
 async def health():
     return {"status": "ok"}
