@@ -10,6 +10,20 @@ app = FastAPI(title="AI Chatbot API")
 # 挂载静态文件
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://liudongxu.cloud",
+        "https://liudongxu.cloud",
+        "http://www.liudongxu.cloud",
+        "https://www.liudongxu.cloud",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # ========== 路由 ==========
 @app.get("/")
