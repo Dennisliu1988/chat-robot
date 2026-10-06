@@ -107,7 +107,7 @@
             const text = document.getElementById('statusText');
 
             try {
-                const res = await fetch('/health', { method: 'GET', cache: 'no-store' });
+                const res = await fetch('health', { method: 'GET', cache: 'no-store' });
                 if (res.ok) {
                     badge.className = "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
                     dot.className = "w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse";
@@ -196,7 +196,7 @@
             let fullReply = '';
 
             try {
-                const response = await fetch('/chat/stream', {
+                const response = await fetch('chat/stream', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
