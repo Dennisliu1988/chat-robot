@@ -1,21 +1,21 @@
-<div id="top"></div>
+<a id="top" name="top"></a>
 
 # ChatRobot - Multi-Provider LLM Dialogue Service Framework
 
-<p align="center">
-  <a href="#top"><b>🇬🇧 English</b></a> | <a href="#chinese-version"><b>🇨🇳 简体中文 (点击跳转)</b></a>
-</p>
+<div align="center">
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python Version" />
-  <img src="https://img.shields.io/badge/FastAPI-0.115+-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI" />
-  <img src="https://img.shields.io/badge/Pydantic-v2-E92063?style=flat-square&logo=pydantic&logoColor=white" alt="Pydantic" />
-  <img src="https://img.shields.io/badge/Package%20Manager-uv-blueviolet?style=flat-square" alt="uv" />
-  <img src="https://img.shields.io/badge/Streaming-SSE-blue?style=flat-square" alt="SSE" />
-  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License" />
-</p>
+### [🇬🇧 English](#top) &nbsp; | &nbsp; [🇨🇳 简体中文](#chinese)
 
-> 💡 **Language Switch**: Looking for Chinese docs? 👉 **[Click here to jump to the Chinese version](#chinese-version)**.
+[![Python Version](https://img.shields.io/badge/Python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white)](#)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Pydantic](https://img.shields.io/badge/Pydantic-v2-E92063?style=flat-square&logo=pydantic&logoColor=white)](https://docs.pydantic.dev/)
+[![Package Manager](https://img.shields.io/badge/Package%20Manager-uv-blueviolet?style=flat-square)](https://docs.astral.sh/uv/)
+[![Streaming](https://img.shields.io/badge/Streaming-SSE-blue?style=flat-square)](#)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+
+</div>
+
+---
 
 **ChatRobot** is a high-performance, production-ready, modular multi-provider AI chat backend framework built with **FastAPI** and **Python 3.12+**. Designed around clean abstractions and the Factory Pattern, it enables seamless hot-swapping between prominent LLM providers like **DeepSeek** and **Alibaba Qwen (通义千问)**. It features low-latency typewriter streaming via Server-Sent Events (SSE), lightweight stateless multi-turn dialogue management, and a robust 3-layer structured output defense system powered by Pydantic.
 
@@ -37,14 +37,14 @@
 
 ## 🛠️ Tech Stack
 
-| Domain | Technology | Description |
-| :--- | :--- | :--- |
-| **Language** | Python 3.12+ | Leverages modern `async`/`await` primitives and strict type annotations |
-| **Web Framework** | FastAPI | High-performance ASGI framework with automatic OpenAPI / Swagger generation |
-| **HTTP Client** | HTTPX | Fully asynchronous, non-blocking HTTP client supporting connection pools and streaming |
-| **Data Validation** | Pydantic v2 | Industry-standard schema validation, serialization, and error tracing |
-| **Streaming Protocol**| SSE (Server-Sent Events) | Native HTTP unidirectional event stream, lightweight and firewall/proxy friendly |
-| **Package Manager**| uv | Blazing fast Python package manager written in Rust |
+| Domain                 | Technology               | Description                                                                            |
+| :--------------------- | :----------------------- | :------------------------------------------------------------------------------------- |
+| **Language**           | Python 3.12+             | Leverages modern `async`/`await` primitives and strict type annotations                |
+| **Web Framework**      | FastAPI                  | High-performance ASGI framework with automatic OpenAPI / Swagger generation            |
+| **HTTP Client**        | HTTPX                    | Fully asynchronous, non-blocking HTTP client supporting connection pools and streaming |
+| **Data Validation**    | Pydantic v2              | Industry-standard schema validation, serialization, and error tracing                  |
+| **Streaming Protocol** | SSE (Server-Sent Events) | Native HTTP unidirectional event stream, lightweight and firewall/proxy friendly       |
+| **Package Manager**    | uv                       | Blazing fast Python package manager written in Rust                                    |
 
 ---
 
@@ -233,31 +233,25 @@ uv run python -m scripts.analyze_resume
 - [ ] **Containerization**: Provide minimal multi-stage Dockerfile and `docker-compose.yml` for turnkey deployment.
 - [ ] **Automated Testing Suite**: Expand end-to-end test suites using `pytest` and `pytest-asyncio`.
 
-<br />
+<a id="chinese" name="chinese"></a>
 
----
----
+# ChatRobot - 多模型 AI 对话服务框架 (Chinese Version)
 
-<br />
+<div align="center">
 
-<div id="chinese-version"></div>
+### [🇬🇧 Back to English / 返回顶部英文版](#top) &nbsp; | &nbsp; [🇨🇳 简体中文](#chinese)
 
-# ChatRobot - 多模型 AI 对话服务框架
+[![Python Version](https://img.shields.io/badge/Python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white)](#)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Pydantic](https://img.shields.io/badge/Pydantic-v2-E92063?style=flat-square&logo=pydantic&logoColor=white)](https://docs.pydantic.dev/)
+[![Package Manager](https://img.shields.io/badge/Package%20Manager-uv-blueviolet?style=flat-square)](https://docs.astral.sh/uv/)
+[![Streaming](https://img.shields.io/badge/Streaming-SSE-blue?style=flat-square)](#)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-<p align="center">
-  <a href="#top"><b>🇬🇧 Back to English (返回英文)</b></a> | <a href="#chinese-version"><b>🇨🇳 简体中文</b></a>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python Version" />
-  <img src="https://img.shields.io/badge/FastAPI-0.115+-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI" />
-  <img src="https://img.shields.io/badge/Pydantic-v2-E92063?style=flat-square&logo=pydantic&logoColor=white" alt="Pydantic" />
-  <img src="https://img.shields.io/badge/Package%20Manager-uv-blueviolet?style=flat-square" alt="uv" />
-  <img src="https://img.shields.io/badge/Streaming-SSE-blue?style=flat-square" alt="SSE" />
-  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License" />
-</p>
+</div>
 
 > 💡 **语言切换**：查看英文说明文档？👉 **[点击这里返回顶部英文版 / Return to English version](#top)**。
+
 
 **ChatRobot** 是一个基于 **FastAPI** 和 **Python 3.12+** 构建的高性能、生产就绪型多模型 AI 对话后端框架。项目采用面向接口与工厂模式设计，原生支持 **DeepSeek**、**通义千问 (Qwen)** 等主流大模型的热插拔切换，提供低延迟打字机级流式传输（SSE）、轻量级无状态多轮对话管理、以及基于 Pydantic 的多重结构化输出防护与容错机制。
 
@@ -279,14 +273,14 @@ uv run python -m scripts.analyze_resume
 
 ## 🛠️ 技术选型
 
-| 维度 | 技术栈 | 说明 |
-| :--- | :--- | :--- |
-| **开发语言** | Python 3.12+ | 充分利用现代异步协程语法与原生类型标注系统 |
-| **Web 框架** | FastAPI | 现代化高性能异步 ASGI 框架，原生生成 OpenAPI / Swagger 文档 |
-| **异步 HTTP** | HTTPX | 异步非阻塞通信，支持长连接池、自动重定向与流式响应 |
-| **数据建模** | Pydantic v2 | 工业级强类型数据校验、序列化及异常定位 |
-| **流式推送** | SSE (Server-Sent Events) | HTTP 标准单向事件流，穿透代理与防火墙，连接轻量稳定 |
-| **工程管理** | uv | 极速 Rust 实现的新一代 Python 依赖与环境管理工具 |
+| 维度          | 技术栈                   | 说明                                                        |
+| :------------ | :----------------------- | :---------------------------------------------------------- |
+| **开发语言**  | Python 3.12+             | 充分利用现代异步协程语法与原生类型标注系统                  |
+| **Web 框架**  | FastAPI                  | 现代化高性能异步 ASGI 框架，原生生成 OpenAPI / Swagger 文档 |
+| **异步 HTTP** | HTTPX                    | 异步非阻塞通信，支持长连接池、自动重定向与流式响应          |
+| **数据建模**  | Pydantic v2              | 工业级强类型数据校验、序列化及异常定位                      |
+| **流式推送**  | SSE (Server-Sent Events) | HTTP 标准单向事件流，穿透代理与防火墙，连接轻量稳定         |
+| **工程管理**  | uv                       | 极速 Rust 实现的新一代 Python 依赖与环境管理工具            |
 
 ---
 
