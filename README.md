@@ -235,7 +235,7 @@ uv run python -m scripts.analyze_resume
 
 <a id="chinese" name="chinese"></a>
 
-# ChatRobot - 多模型 AI 对话服务框架 (Chinese Version)
+# ChatRobot - 多模型 AI 对话服务框架
 
 <div align="center">
 
@@ -250,7 +250,6 @@ uv run python -m scripts.analyze_resume
 
 </div>
 
-> 💡 **语言切换**：查看英文说明文档？👉 **[点击这里返回顶部英文版 / Return to English version](#top)**。
 
 
 **ChatRobot** 是一个基于 **FastAPI** 和 **Python 3.12+** 构建的高性能、生产就绪型多模型 AI 对话后端框架。项目采用面向接口与工厂模式设计，原生支持 **DeepSeek**、**通义千问 (Qwen)** 等主流大模型的热插拔切换，提供低延迟打字机级流式传输（SSE）、轻量级无状态多轮对话管理、以及基于 Pydantic 的多重结构化输出防护与容错机制。
