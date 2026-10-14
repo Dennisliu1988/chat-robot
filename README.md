@@ -239,7 +239,7 @@ uv run python -m scripts.analyze_resume
 
 <div align="center">
 
-### [🇬🇧 Back to English / 返回顶部英文版](#top) &nbsp; | &nbsp; [🇨🇳 简体中文](#chinese)
+### [🇬🇧 English](#top) &nbsp; | &nbsp; [🇨🇳 简体中文](#chinese)
 
 [![Python Version](https://img.shields.io/badge/Python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white)](#)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
