@@ -1,150 +1,186 @@
-# ChatRobot - 多模型 AI 对话服务
+# ChatRobot - 多模型 AI 对话服务框架
 
-[![Python Version](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)](https://fastapi.tiangolo.com/)
-[![uv](https://img.shields.io/badge/package%20manager-uv-blueviolet.svg)](https://docs.astral.sh/uv/)
+<p align="center">
+  <a href="README.md"><b>🇨🇳 简体中文</b></a> | <a href="README_EN.md"><b>🇬🇧 English</b></a>
+</p>
 
-ChatRobot 是一个基于 **FastAPI** 构建的高性能、模块化多模型 AI 对话后端服务。支持 **DeepSeek** 与 **通义千问 (Qwen)** 等多种主流大模型的无缝接入，具备流式输出（SSE 打字机效果）、多轮对话上下文管理、结构化数据解析及容错重试能力。
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python Version" />
+  <img src="https://img.shields.io/badge/FastAPI-0.115+-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/Pydantic-v2-E92063?style=flat-square&logo=pydantic&logoColor=white" alt="Pydantic" />
+  <img src="https://img.shields.io/badge/Package%20Manager-uv-blueviolet?style=flat-square" alt="uv" />
+  <img src="https://img.shields.io/badge/Streaming-SSE-blue?style=flat-square" alt="SSE" />
+  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License" />
+</p>
 
----
-
-## 🌟 功能特性
-
-- **多 Provider 架构支持**：基于抽象基类（ABC）与工厂模式设计，支持 **DeepSeek** 与 **通义千问 (Qwen)** 热插拔切换，具备高度可扩展性。
-- **打字机级流式传输（SSE）**：基于 Server-Sent Events（`text/event-stream`）实现单向流式输出，有效降低首字延迟（TTFT）。
-- **轻量无状态多轮对话**：客户端维护历史上下文（Client-managed Context），服务端无状态（Stateless），原生支持水平横向扩展与负载均衡。
-- **结构化输出与容错机制**：基于 Pydantic 的三层防护网（Prompt 约束 ➔ Schema 运行时校验 ➔ 错误反馈自动重试）。
-- **静态资源即开即用**：内置 Web 对话演示界面，支持浏览器端直接体验打字机流式交互。
-- **现代化工程工具链**：采用高性能 Python 包管理器 `uv` 进行统一的依赖管理与虚环境隔离。
+**ChatRobot** 是一个基于 **FastAPI** 和 **Python 3.12+** 构建的高性能、生产就绪型多模型 AI 对话后端框架。项目采用面向接口与工厂模式设计，原生支持 **DeepSeek**、**通义千问 (Qwen)** 等主流大模型的热插拔切换，提供低延迟打字机级流式传输（SSE）、轻量级无状态多轮对话管理、以及基于 Pydantic 的多重结构化输出防护与容错机制。
 
 ---
 
-## 🛠 技术栈
+## 🌟 核心特性
 
-| 模块 | 技术选型 | 说明 |
+- 🔌 **多 Provider 统一抽象架构**：基于抽象基类（ABC）与工厂模式，隔离厂商 API 差异，支持通过配置无感热插拔切换 Provider。
+- ⚡ **打字机级实时流式传输（SSE）**：基于 Server-Sent Events（`text/event-stream`）推送响应，极致缩短首字延迟（TTFT），提供平滑打字机体验。
+- 🌐 **无状态轻量设计（Stateless）**：客户端自维护上下文历史（Client-managed Context），服务端无状态，天然具备极高的水平伸缩扩展能力。
+- 🛡️ **结构化输出三重防御网**：
+  1. *Prompt 级约束*（系统指令 + 格式模板）；
+  2. *Schema 运行时强校验*（Pydantic v2 校验与字段清洗）；
+  3. *容错自愈与回退重试*（捕获异常并反馈模型二次修正）。
+- 🖥️ **内置 WebUI 即开即用**：自带现代化深色交互页面，开箱即验流式打字与多轮对话。
+- 🚀 **现代化工程工具链**：使用超高速 Rust 包管理器 `uv` 进行依赖解析与环境隔离，秒级完成构建。
+
+---
+
+## 🛠️ 技术选型
+
+| 维度 | 技术栈 | 说明 |
 | :--- | :--- | :--- |
-| **编程语言** | Python 3.12+ | 利用现代异步语法及原生类型注解 |
-| **Web 框架** | FastAPI | 高性能异步 ASGI 框架，内置 OpenAPI 文档 |
-| **HTTP 客户端** | HTTPX | 异步非阻塞 HTTP 请求，支持连接池与流式响应 |
-| **数据校验** | Pydantic v2 | 强类型数据建模与高性能校验 |
-| **包管理** | uv | 极速 Rust 实现的 Python 依赖管理工具 |
-| **通信机制** | SSE (Server-Sent Events) | 单向实时文本流推送 |
+| **开发语言** | Python 3.12+ | 充分利用现代异步协程语法与原生类型标注系统 |
+| **Web 框架** | FastAPI | 现代化高性能异步 ASGI 框架，原生生成 OpenAPI / Swagger 文档 |
+| **异步 HTTP** | HTTPX | 异步非阻塞通信，支持长连接池、自动重定向与流式响应 |
+| **数据建模** | Pydantic v2 | 工业级强类型数据校验、序列化及异常定位 |
+| **流式推送** | SSE (Server-Sent Events) | HTTP 标准单向事件流，穿透代理与防火墙，连接轻量稳定 |
+| **工程管理** | uv | 极速 Rust 实现的新一代 Python 依赖与环境管理工具 |
+
+---
+
+## 🏛️ 架构设计与设计哲学
+
+> 📘 欲了解详细的设计决策与技术权衡，请阅读：[架构决策记录 (docs/architecture.md)](docs/architecture.md)
+
+### 1. 抽象基类 + 工厂模式
+
+```
+                    ┌─────────────────────────┐
+                    │     FastAPI 路由层      │
+                    │  (/chat, /chat/stream)  │
+                    └────────────┬────────────┘
+                                 │ 调用
+                    ┌────────────▼────────────┐
+                    │     get_provider()      │ (工厂函数)
+                    └────────────┬────────────┘
+                                 │ 依赖抽象 (DIP)
+         ┌───────────────────────┴───────────────────────┐
+         ▼                                               ▼
+┌─────────────────────────────────┐   ┌─────────────────────────────────┐
+│        DeepSeekProvider         │   │          QwenProvider           │
+│   (继承自抽象基类 LLMProvider)     │   │   (继承自抽象基类 LLMProvider)     │
+└─────────────────────────────────┘   └─────────────────────────────────┘
+```
+
+- **依赖倒置与解耦**：上层路由仅依赖基类契约，无需知晓具体厂商的请求封装、鉴权 Header 或 Token 解析细节。
+- **开闭原则（OCP）**：新增任何第三方模型厂商（如 Claude / GLM / OpenAI），只需继承 `LLMProvider` 并向工厂注册，现有业务代码零改动。
+
+### 2. 为什么流式采用 SSE 而非 WebSocket？
+
+- **场景契合度高**：大语言模型文本补全是典型的一问一答及“服务端向客户端单向推送”场景，无需全双工双向连接。
+- **网络穿透友好**：SSE 基于标准 HTTP/1.1 或 HTTP/2，天然兼容 CDN、反向代理（Nginx）、云负载均衡与各类中间件。
+- **开销极低**：免去 WebSocket 的握手切换协议（HTTP Upgrade）成本，连接断开后原生支持自动重连。
+
+### 3. 为什么多轮上下文由客户端自维护？
+
+- **高可用与易伸缩**：服务端不维系内存 Session 或分布式分布式锁，任意节点宕机或水平扩容均对请求透明。
+- **灵活性**：客户端可自主根据 Token 预算实现历史滑动窗口剪枝（Sliding Window）或消息压缩策略。
 
 ---
 
 ## 🚀 快速开始
 
-### 1. 克隆项目与安装依赖
+### 1. 克隆代码与依赖安装
 
-项目推荐使用 [uv](https://docs.astral.sh/uv/) 管理依赖：
+建议使用 [uv](https://docs.astral.sh/uv/) 初始化环境并安装依赖：
 
 ```bash
-# 同步并安装依赖
+# 克隆仓库
+git clone https://github.com/your-username/chat-robot.git
+cd chat-robot
+
+# 安装并同步项目依赖
 uv sync
 ```
 
 ### 2. 配置环境变量
 
-复制环境配置文件模版并填入你的 API 密钥：
+从示例模版创建本地 `.env` 文件：
 
 ```bash
 cp .env.example .env
 ```
 
-编辑 `.env` 文件：
+编辑 `.env` 文件配置模型凭证及默认提供商：
 
 ```ini
-# 大模型 API Key 配置（至少配置一个）
-DEEPSEEK_API_KEY=sk-xxxxxx
-QWEN_API_KEY=sk-xxxxxx
+# 大模型 API Key 配置（至少配置一项）
+DEEPSEEK_API_KEY=sk-xxxxxxxxxxxxxxxxxxxx
+QWEN_API_KEY=sk-xxxxxxxxxxxxxxxxxxxx
 
-# 默认使用的 Provider（可选: deepseek 或 qwen）
+# 默认使用的模型供应商 (支持: deepseek 或 qwen)
 LLM_PROVIDER=deepseek
 ```
 
-### 3. 启动开发服务器
+### 3. 运行服务
+
+通过 `uv` 启动本地 ASGI 服务器：
 
 ```bash
-uv run uvicorn app.main:app --reload
+uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-- **API 接口地址**：`http://127.0.0.1:8000`
-- **Swagger 交互文档**：`http://127.0.0.1:8000/docs`
-- **内置前端页面**：`http://127.0.0.1:8000/static/index.html`
+启动完成后，你可以通过浏览器或客户端访问：
+- 🌐 **Web 交互界面**：[http://127.0.0.1:8000/](http://127.0.0.1:8000/) 或 [http://127.0.0.1:8000/static/index.html](http://127.0.0.1:8000/static/index.html)
+- 📖 **Swagger API 交互文档**：[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- 📑 **ReDoc API 文档**：[http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
 
 ---
 
-## 🏛 核心架构设计
-
-> 详细设计思路与权衡考量，请参阅：👉 [架构决策记录 (docs/architecture.md)](docs/architecture.md)
-
-### 1. 为什么采用“抽象基类 + 工厂模式”？
-```
-                 ┌──────────────────┐
-                 │  FastAPI 路由层  │
-                 └─────────┬────────┘
-                           │ 获取实例
-                 ┌─────────▼────────┐
-                 │  get_provider()  │ (工厂函数)
-                 └─────────┬────────┘
-                           │ 遵循统一契约
-           ┌───────────────┴───────────────┐
-           ▼                               ▼
-┌──────────────────────┐        ┌──────────────────────┐
-│   DeepSeekProvider   │        │     QwenProvider     │
-│  (实现 LLMProvider)  │        │  (实现 LLMProvider)  │
-└──────────────────────┘        └──────────────────────┘
-```
-- **解耦业务与供应商**：API 路由只需调用基类 `chat()` 或 `stream_chat()` 契约方法，无需关心具体厂商的鉴权机制和请求差异。
-- **开闭原则（OCP）**：新增任何模型厂商，仅需新增对应 Provider 类并在工厂注册，主服务代码零修改。
-
-### 2. 为什么流式输出选用 SSE 而非 WebSocket？
-- **单向交互契合**：LLM 补全输出是典型的服务端向客户端单向推送场景，无需 WebSocket 的全双工双向开销。
-- **网络基础设施友好**：SSE 遵循标标准 HTTP 协议，完美兼容现有的反向代理、负载均衡、认证中间件与防火墙策略。
-- **低延迟轻量化**：免除复杂长连接握手与协议升级，首字延迟更低，客户端重连机制更稳健。
-
-### 3. 为什么多轮对话由客户端维护历史？
-- **服务端无状态（Stateless）**：避免了服务端内存 Session 或分布式锁的复杂度，服务节点可随时伸缩扩容。
-- **灵活性**：客户端可自主控制滑动窗口与携带历史轮数，保障上下文 Token 预算。
-
----
-
-## 📡 API 接口规范
+## 📡 API 接口参考
 
 ### 1. 健康检查
 - **路径**：`GET /health`
+- **说明**：用于负载均衡健康探测及存活探针。
 - **响应**：`{"status": "ok"}`
 
-### 2. 普通同步对话
+### 2. 同步对话
 - **路径**：`POST /chat`
-- **请求体（JSON）**：
+- **Content-Type**：`application/json`
+- **请求体**：
   ```json
   {
-    "message": "什么是工厂模式？",
+    "message": "请用一句话解释什么是工厂模式？",
     "history": [
-      {"role": "user", "content": "你好"},
-      {"role": "assistant", "content": "你好！有什么我可以帮你的？"}
+      { "role": "user", "content": "你好" },
+      { "role": "assistant", "content": "你好！有什么我可以协助你的？" }
     ]
   }
   ```
-- **响应体（JSON）**：
+- **响应体**：
   ```json
   {
-    "reply": "工厂模式是一种创建型设计模式..."
+    "reply": "工厂模式是一种创建型设计模式，它提供了一种将对象创建逻辑与具体使用解耦的机制。"
   }
   ```
 
-### 3. 流式对话（SSE）
+### 3. 流式对话（Server-Sent Events）
 - **路径**：`POST /chat/stream`
-- **媒体类型**：`text/event-stream`
-- **事件流示例**：
+- **Content-Type**：`application/json`
+- **响应类型**：`text/event-stream`
+- **cURL 快速调用示例**：
+  ```bash
+  curl -N -X POST "http://127.0.0.1:8000/chat/stream" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "message": "讲一个关于程序员的冷笑话",
+      "history": []
+    }'
+  ```
+- **输出流示例**：
   ```text
-  data: 你
-  data: 好
-  data: ，
-  data: 我
-  data: 是
-  data: AI
+  data: 为什么
+  data: 程序员
+  data: 喜欢
+  data: 戴耳机？
+  data: 因为不想听
+  data: 需求变更！
   data: [DONE]
   ```
 
@@ -152,57 +188,62 @@ uv run uvicorn app.main:app --reload
 
 ## 📂 项目结构
 
-```
-chatRobot/
-├── app/                          # 核心应用源码
+```text
+chat-robot/
+├── app/                          # 核心业务源码目录
 │   ├── __init__.py
-│   ├── config.py                 # 环境配置加载 (.env)
-│   ├── main.py                   # FastAPI 应用入口与路由定义
-│   ├── models.py                 # Pydantic 请求与响应数据契约
-│   ├── providers/                # 多模型 Provider 模块
-│   │   ├── __init__.py           # 工厂函数 get_provider
+│   ├── config.py                 # 环境配置与环境变量加载
+│   ├── main.py                   # FastAPI 应用入口、路由与中间件定义
+│   ├── models.py                 # Pydantic 请求与响应数据契约 Schema
+│   ├── providers/                # 多模型接入抽象与具体实现
+│   │   ├── __init__.py           # 工厂方法 get_provider
 │   │   ├── base.py               # 抽象基类 LLMProvider
-│   │   ├── deepseek.py           # DeepSeek 实现
-│   │   └── qwen.py               # 通义千问实现
-│   └── services/                 # 业务逻辑层（预留后续会话与存储扩展）
+│   │   ├── deepseek.py           # DeepSeek 供应商接入实现
+│   │   └── qwen.py               # 通义千问 (Qwen) 供应商接入实现
+│   └── services/                 # 业务逻辑服务层（预留会话/业务增强）
 │       └── __init__.py
-├── scripts/                      # 测试、探索与实验脚本
-│   ├── analyze_resume.py         # 结构化输出/Prompt/CoT/Pydantic防御实验
-│   └── stream_test.py            # Provider 流式功能验证脚本
-├── static/                       # 静态资源与前端页面
-│   └── index.html                # 前端对话界面
-├── tests/                        # 单元测试与集成测试
-│   └── __init__.py
-├── docs/                         # 架构与技术文档
+├── docs/                         # 技术决策与设计文档
 │   └── architecture.md           # 架构决策记录 (ADR)
-├── .env                          # 本地环境变量（已加入 .gitignore）
-├── .env.example                  # 环境变量示例
-├── .gitignore
+├── scripts/                      # 实验、评测与独立验证脚本
+│   ├── analyze_resume.py         # 结构化解析/CoT/Pydantic校验与重试演示
+│   └── stream_test.py            # Provider 流式功能独立验证脚本
+├── static/                       # 静态资源与前端体验页面
+│   └── index.html                # 前端打字机对话 WebUI
+├── tests/                        # 自动化测试用例
+│   └── __init__.py
+├── .env.example                  # 环境变量配置示例
 ├── pyproject.toml                # 项目元数据与依赖定义
-├── uv.lock                       # 依赖版本锁定文件
-└── README.md                     # 项目介绍与快速开始文档
+├── uv.lock                       # 依赖精确锁定文件
+├── README.md                     # 中文文档
+└── README_EN.md                  # 英文文档
 ```
 
 ---
 
-## 🧪 测试脚本运行
+## 🧪 实验与验证脚本
 
-通过 `scripts/` 中的脚本可独立验证模型能力：
+仓库在 `scripts/` 下提供可独立运行的验证脚本：
 
 ```bash
-# 测试当前 Provider 的流式输出能力
+# 验证底层 Provider 的流式输出能力
 uv run python -m scripts.stream_test
 
-# 运行简历结构化解析与重试机制实验
+# 运行结构化数据解析与 Pydantic 容错重试机制演示
 uv run python -m scripts.analyze_resume
 ```
 
 ---
 
-## 🗺 后续演进计划 (Roadmap)
+## 🗺️ 后续路线图 (Roadmap)
 
-- [ ] **会话持久化与管理**：引入 SQLite / PostgreSQL，支持多会话切换、历史漫游与持久化存储。
-- [ ] **高并发限流与缓存**：使用 Redis 缓存常见高频问答，降低大模型 API 调用成本。
-- [ ] **用户认证与安全鉴权**：增加 JWT 认证，支持用户个人会话隔离与配额控制。
-- [ ] **容器化与部署**：提供 Dockerfile 与 docker-compose 配置，支持一键容器化交付。
-- [ ] **自动化测试集**：编写基于 pytest 与 pytest-asyncio 的测试用例，覆盖各大核心路由与异常边界。
+- [ ] **多会话持久化支持**：引入 SQLite / PostgreSQL，支持会话列表查询、历史记录恢复与重命名。
+- [ ] **分布式缓存与限流**：集成 Redis 实现高频常见问答语义/哈希缓存，以及基于 IP / User 的限流保护。
+- [ ] **安全与用户体系**：接入 JWT 身份鉴权机制，实现多租户数据隔离与用量配额。
+- [ ] **Docker 容器化**：提供轻量 Alpine/Slim 基础镜像与 `docker-compose.yml` 编排支持。
+- [ ] **自动化测试覆盖**：完善基于 `pytest` 与 `pytest-asyncio` 的端到端流式与异常用例覆盖。
+
+---
+
+## 📄 开源许可证
+
+本项目基于 [MIT License](LICENSE) 开源。
